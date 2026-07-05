@@ -1,7 +1,7 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy import String, func, ForeignKey, Enum, DateTime
 import enum
-from db import Base
+from src.db import Base
 from datetime import datetime
 
 class Status(enum.Enum):

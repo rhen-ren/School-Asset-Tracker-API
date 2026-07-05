@@ -1,7 +1,7 @@
 from sqlalchemy.orm import DeclarativeBase,  Mapped, mapped_column, relationship
 from sqlalchemy import String, ForeignKey, func, DateTime
 from datetime import datetime
-from db import Base
+from src.db import Base
 
 class Category(Base):
     __tablename__ = "Category"
