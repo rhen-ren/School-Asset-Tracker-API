@@ -1,4 +1,5 @@
 from src.db import SessionLocal
+from fastapi.security import OAuth2PasswordBearer
 
 def get_db():
     try:
@@ -6,3 +7,5 @@ def get_db():
         yield db
     finally:
         db.close()
+
+oath2_scheme = OAuth2PasswordBearer("/user/login")
