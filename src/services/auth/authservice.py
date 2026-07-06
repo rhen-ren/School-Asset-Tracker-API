@@ -25,16 +25,22 @@ def authenticate_user(email: str, password: str, db: Session) -> User:
         raise HTTPException(status_code=401, detail="Unauthorized")
     return user
 
+#hash a users password
+#used when signingup a user
+def hash_password(password: str):
+    if password:
+        return password_hash.hash(password)
+
 #access token creation
 #uses jwt
-def create_access_token(data: dict) -> dict:
+def create_access_token(data: dict) -> Token:
     to_encode: dict = data.copy()
     encoded_jwt: str = jwt.encode(to_encode, SECRETKEY, algorithm=ALGORITHM)
     return Token(access_token=encoded_jwt, token_type="bearer")
 
 #token validation
 #returns user account
-def validate_token(token: str, db: Session):
+def validate_token(token: str, db: Session) -> User:
     try:
         payload: dict = jwt.decode(token, SECRETKEY, algorithms=[ALGORITHM])
         email: str | None  = payload.get("email")
