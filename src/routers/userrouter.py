@@ -20,10 +20,10 @@ async def create_user(db: Session = Depends(get_db)):
 async def get_user(db: Session = Depends(get_db)):
     pass
 
-@router.get("/user/login")
+@router.post("/user/login")
 async def login_user(user_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)) -> Token:
     login_user = LoginUser(email = user_data.username, password = user_data.password)
-    return userservice.login_user(login_user.email, login_user.password)
+    return userservice.login_user(login_user.email, login_user.password, db)
 
 @router.post("/user/signup")
 async def signup_user(user_data: SignupUser, db: Session = Depends(get_db)) -> Token:
