@@ -2,10 +2,11 @@ from fastapi import FastAPI
 from src.db import Base, engine
 import src.models
 import uvicorn
-from src.routers import userrouter
+from src.routers import userrouter, categoryrouter
 
 app = FastAPI()
 app.include_router(userrouter.router)
+app.include_router(categoryrouter.router)
 Base.metadata.create_all(bind=engine)
 
 
