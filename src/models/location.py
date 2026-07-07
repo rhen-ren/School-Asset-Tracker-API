@@ -8,7 +8,7 @@ class Location(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(200), nullable=False, unique=True)
-    user_id: Mapped[int] = mapped_column(ForeignKey("Asset.id"))
+    user_id: Mapped[int] = mapped_column(ForeignKey("User.id"))
     building: Mapped[str] = mapped_column(String(200), nullable=False, unique=True)
     floor: Mapped[str] = mapped_column(String(200), nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime(), default=func.now())

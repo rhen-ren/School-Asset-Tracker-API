@@ -14,5 +14,5 @@ class Category(Base):
     updated_at: Mapped[datetime] = mapped_column(DateTime(), default=func.now(), onupdate=func.now())
 
     user: Mapped["User"] = relationship("User", back_populates="categories")
-    assest: Mapped[list["Asset"]] = relationship("Asset", back_populates="category")
+    assets: Mapped[list["Asset"]] = relationship("Asset", back_populates="category")
     

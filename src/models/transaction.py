@@ -15,6 +15,7 @@ class Transaction(Base):
     __tablename__ = "Transaction"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    asset_id: Mapped[int] = mapped_column(ForeignKey("Asset.id"))
     action_type: Mapped[ActionType] = mapped_column(Enum(ActionType), default=ActionType.CREATE)
     notes: Mapped[String] = mapped_column(String(500), nullable=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("User.id"))
