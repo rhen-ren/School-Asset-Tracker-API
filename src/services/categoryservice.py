@@ -29,6 +29,10 @@ def create_category(user_id: int, category_name: str, categeory_description: str
 def update_category(category_id: int, user_id: int, categroy_name: str, category_description: str, db: Session) -> Category:
     try:
         current_category: Category = db.get(Category, category_id)
+
+        if not current_category:
+            raise HTTPException(status_code=404)
+        
         if current_category.user_id == user_id:
             current_category.name = categroy_name
             current_category.description = category_description
