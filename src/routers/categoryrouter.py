@@ -29,3 +29,16 @@ def create_category(token: str = Depends(oath2_scheme), data: CreateCategory = B
             created_at=category_obj.created_at,
            updated_at=category_obj.updated_at 
         )
+
+@router.put("/category/{category_id}")
+def update_category(token: str = Depends(oath2_scheme), category_id: int = None, data: CreateCategory = Body(...), db: Session = Depends(get_db)):
+    user: User = authservice.validate_token(token, db)
+    if user:
+        category_obj: Category = categoryservice.update_category(category_id, user.id, data.name, data.description, db)
+        return GetCategory(
+            id=category_obj.id,
+            name=category_obj.name,
+            description=category_obj.description,
+            created_at=category_obj.created_at,
+           updated_at=category_obj.updated_at 
+        )
