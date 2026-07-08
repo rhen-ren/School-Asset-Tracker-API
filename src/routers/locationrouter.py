@@ -39,4 +39,23 @@ def create_location(token: str = Depends(oath2_scheme), data: CreateLocation = B
             created_at=location_obj.created_at,
             updated_at=location_obj.updated_at
         )
+
+@router.put("/location/{location_id}")
+def update_location(
+    token: str = Depends(oath2_scheme), location_id: int = None, data: CreateLocation = Body(...),
+    db: Session = Depends(get_db)
+) -> GetLocation:
+    user: User = authservice.validate_token(token, db)
+    if user:
+        location_obj: Location = locationservice.update_location(user.id, location_id, data.name, data.building, data.floor, db)
         
+        return GetLocation(
+            id=location_obj.id,
+            name=location_obj.name,
+            building=location_obj.building,
+            floor=location_obj.floor,
+            created_at=location_obj.created_at,
+            updated_at=location_obj.updated_at
+        )
+
+    
