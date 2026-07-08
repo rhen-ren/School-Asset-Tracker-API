@@ -23,4 +23,21 @@ def create_category(user_id: int, category_name: str, categeory_description: str
         return new_category
     except:
         raise HTTPException(status_code=400)
+    
+#handle update of categories
+#only the user that created the category can update
+def update_category(category_id: int, user_id: int, categroy_name: str, category_description: str, db: Session) -> Category:
+    try:
+        current_category: Category = db.get(Category, category_id)
+        if current_category.user_id == user_id:
+            current_category.name = categroy_name
+            current_category.description = category_description
+            db.commit()
+            db.refresh(current_category)
+            return current_category
+        else:
+            raise HTTPException(status_code=401)
+    except:
+        raise HTTPException(status_code=400)
+
 
