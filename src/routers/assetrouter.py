@@ -8,6 +8,10 @@ router = APIRouter()
 def get_assets(db: Session = Depends(get_db)):
     pass
 
+@router.get("/asset/{asset_id}")
+def get_asset(asset_id: int, db: Session = Depends(get_db)):
+    pass
+
 @router.post("/asset")
 def create_asset(db: Session = Depends(get_db)):
     pass
