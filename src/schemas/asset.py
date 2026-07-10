@@ -9,3 +9,7 @@ class GetAsset(BaseModel):
     img_url: str
     created_at: datetime
     updated_at: datetime
+
+class CreateAsset(GetAsset):
+    category: str
+    location: int
