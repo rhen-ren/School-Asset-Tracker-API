@@ -12,7 +12,6 @@ class GetAsset(BaseModel):
     updated_at: datetime
 
 class CreateAsset(BaseModel):
-    id: int
     name: str
     status: str
     serial_number: int
@@ -20,5 +19,5 @@ class CreateAsset(BaseModel):
     img_url: str
     created_at: datetime
     updated_at: datetime
-    category: str
+    category: int
     location: int
