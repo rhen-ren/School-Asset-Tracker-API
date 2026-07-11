@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Body, Form, UploadFile, File
 from sqlalchemy.orm import Session
-from src.dependency import get_db, oauth2_scheme
+from src.dependency import get_db, oauth2_scheme, save_img
 from src.models.asset import Asset
 from src.schemas.asset import CreateAsset, GetAsset
 from src.services.auth import authservice
@@ -37,7 +37,7 @@ def get_asset(asset_id: int, token: str = Depends(oauth2_scheme), db: Session = 
             updated_at=asset_obj.updated_at
         )
 @router.post("/assets")
-def create_asset(token: str = Depends(oauth2_scheme), data: CreateAsset = Form(...), img_url: UploadFile = File(None), db: Session = Depends(get_db)):
+def create_asset(token: str = Depends(oauth2_scheme), data: CreateAsset = Form(...), img: str = Depends(save_img), db: Session = Depends(get_db)):
     user = authservice.validate_token(token)
     if user:
         #TODO:
