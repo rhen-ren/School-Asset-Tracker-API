@@ -1,6 +1,6 @@
-from fastapi import APIRouter, Depends, Body
+from fastapi import APIRouter, Depends, Body, Form, UploadFile, File
 from sqlalchemy.orm import Session
-from src.dependency import get_db, oath2_scheme
+from src.dependency import get_db, oauth2_scheme
 from src.models.asset import Asset
 from src.schemas.asset import CreateAsset, GetAsset
 from src.services.auth import authservice
@@ -9,7 +9,7 @@ from src.services import assetservice
 router = APIRouter()
 
 @router.get("/assets")
-def get_assets(token: str = Depends(oath2_scheme), db: Session = Depends(get_db)) -> list[GetAsset]:
+def get_assets(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> list[GetAsset]:
     user = authservice.validate_token(token)
     if user:
         asset_obj: list[Asset] = assetservice.get_assets(db)
@@ -20,8 +20,8 @@ def get_assets(token: str = Depends(oath2_scheme), db: Session = Depends(get_db)
 
         return assets
 
-@router.get("/asset/{asset_id}")
-def get_asset(asset_id: int, token: str = Depends(oath2_scheme), db: Session = Depends(get_db)) -> GetAsset:
+@router.get("/assets/{asset_id}")
+def get_asset(asset_id: int, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> GetAsset:
     user = authservice.validate_token(token)
     if user:
         asset_obj = assetservice.get_asset(asset_id, db)
@@ -36,8 +36,8 @@ def get_asset(asset_id: int, token: str = Depends(oath2_scheme), db: Session = D
             created_at=asset_obj.created_at,
             updated_at=asset_obj.updated_at
         )
-@router.post("/asset")
-def create_asset(token: str = Depends(oath2_scheme), data: CreateAsset = Body(...), db: Session = Depends(get_db)):
+@router.post("/assets")
+def create_asset(token: str = Depends(oauth2_scheme), data: CreateAsset = Form(...), img_url: UploadFile = File(None), db: Session = Depends(get_db)):
     user = authservice.validate_token(token)
     if user:
         #TODO:

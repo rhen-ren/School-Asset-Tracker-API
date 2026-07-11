@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Body, Depends
 from sqlalchemy.orm import Session
-from src.dependency import get_db, oath2_scheme
+from src.dependency import get_db, oauth2_scheme
 from src.models.user import User
 from src.models.category import Category
 from src.schemas.category import GetCategory, CreateCategory
@@ -10,7 +10,7 @@ from src.services import categoryservice
 router = APIRouter()
 
 @router.get("/categories")
-def get_categories(token: str = Depends(oath2_scheme),db: Session = Depends(get_db)) -> list[GetCategory]:
+def get_categories(token: str = Depends(oauth2_scheme),db: Session = Depends(get_db)) -> list[GetCategory]:
     user: User = authservice.validate_token(token, db)
     if user:
         categories_obj: list[Category] = categoryservice.get_categories(db)
@@ -18,7 +18,7 @@ def get_categories(token: str = Depends(oath2_scheme),db: Session = Depends(get_
         return categorires
     
 @router.post("/category")
-def create_category(token: str = Depends(oath2_scheme), data: CreateCategory = Body(...), db: Session = Depends(get_db)) -> GetCategory:
+def create_category(token: str = Depends(oauth2_scheme), data: CreateCategory = Body(...), db: Session = Depends(get_db)) -> GetCategory:
     user: User = authservice.validate_token(token, db)
     if user:
         category_obj: Category = categoryservice.create_category(user.id, data.name, data.description, db)
@@ -31,7 +31,7 @@ def create_category(token: str = Depends(oath2_scheme), data: CreateCategory = B
         )
 
 @router.put("/category/{category_id}")
-def update_category(token: str = Depends(oath2_scheme), category_id: int = None, data: CreateCategory = Body(...), db: Session = Depends(get_db)):
+def update_category(token: str = Depends(oauth2_scheme), category_id: int = None, data: CreateCategory = Body(...), db: Session = Depends(get_db)):
     user: User = authservice.validate_token(token, db)
     if user:
         category_obj: Category = categoryservice.update_category(category_id, user.id, data.name, data.description, db)

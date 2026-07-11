@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Body
 from sqlalchemy.orm import Session
-from src.dependency import get_db, oath2_scheme
+from src.dependency import get_db, oauth2_scheme
 from src.models.location import Location
 from src.models.user import User
 from src.services.auth import authservice
@@ -10,7 +10,7 @@ from src.schemas.location import GetLocation, CreateLocation
 router = APIRouter()
 
 @router.get("/locations")
-def get_locations(token: str = Depends(oath2_scheme), db: Session = Depends(get_db)) -> list[GetLocation]:
+def get_locations(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> list[GetLocation]:
     user:User = authservice.validate_token(token, db)
     if user:
         location_obj: list[Location] = locationservice.get_locations(db)
@@ -26,7 +26,7 @@ def get_locations(token: str = Depends(oath2_scheme), db: Session = Depends(get_
         return locations
 
 @router.post("/location")
-def create_location(token: str = Depends(oath2_scheme), data: CreateLocation = Body(...), db: Session = Depends(get_db)) -> GetLocation:
+def create_location(token: str = Depends(oauth2_scheme), data: CreateLocation = Body(...), db: Session = Depends(get_db)) -> GetLocation:
     user: User = authservice.validate_token(token, db)
     if user:
         location_obj: Location = locationservice.create_location(user.id, data.name, data.building, data.floor, db)
@@ -42,7 +42,7 @@ def create_location(token: str = Depends(oath2_scheme), data: CreateLocation = B
 
 @router.put("/location/{location_id}")
 def update_location(
-    token: str = Depends(oath2_scheme), location_id: int = None, data: CreateLocation = Body(...),
+    token: str = Depends(oauth2_scheme), location_id: int = None, data: CreateLocation = Body(...),
     db: Session = Depends(get_db)
 ) -> GetLocation:
     user: User = authservice.validate_token(token, db)
