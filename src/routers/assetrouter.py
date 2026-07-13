@@ -43,6 +43,17 @@ def create_asset(token: str = Depends(oauth2_scheme), data: CreateAsset = Form(.
     if user:
         asset_obj = assetservice.create_asset(user.id, data.name, data.category_id, data.location_id, data.status, data.serial_number, data.purchase_date, data.img_url, db)
 
+        return GetAsset(
+            id=asset_obj.id,
+            name=asset_obj.name,
+            status=asset_obj.status,
+            serial_number=asset_obj.serial_number,
+            purchase_date=asset_obj.purchase_date,
+            img_url=asset_obj.img_url,
+            created_at=asset_obj.created_at,
+            updated_at=asset_obj.updated_at
+        )
+
 @router.put("/asset/{asset_id}")
 def update_asset(asset_id: int, db: Session = Depends(get_db)):
     pass
