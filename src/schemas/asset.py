@@ -14,10 +14,10 @@ class GetAsset(BaseModel):
 class CreateAsset(BaseModel):
     name: str
     status: str
-    serial_number: int
+    serial_number: str
     purchase_date: datetime
     img_url: str
     created_at: datetime
     updated_at: datetime
-    category: int
-    location: int
+    category_id: int
+    location_id: int
