@@ -41,7 +41,7 @@ def get_asset(asset_id: int, token: str = Depends(oauth2_scheme), db: Session = 
 def create_asset(token: str = Depends(oauth2_scheme), data: CreateAsset = Form(...), img: str = Depends(save_img), db: Session = Depends(get_db)):
     user: User = authservice.validate_token(token)
     if user:
-        asset_obj = assetservice.create_asset(user.id, data.name, data.category_id, data.location_id, data.status, data.serial_number, data.purchase_date, data.img_url, db)
+        asset_obj = assetservice.create_asset(user.id, data.name, data.category_id, data.location_id, data.status, data.serial_number, data.purchase_date, img, db)
 
         return GetAsset(
             id=asset_obj.id,
