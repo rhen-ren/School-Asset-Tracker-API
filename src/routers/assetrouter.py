@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, Body, Form, UploadFile, File
 from sqlalchemy.orm import Session
 from src.dependency import get_db, oauth2_scheme, save_img
 from src.models.asset import Asset
+from src.models.user import User
 from src.schemas.asset import CreateAsset, GetAsset
 from src.services.auth import authservice
 from src.services import assetservice
@@ -22,7 +23,7 @@ def get_assets(token: str = Depends(oauth2_scheme), db: Session = Depends(get_db
 
 @router.get("/assets/{asset_id}")
 def get_asset(asset_id: int, token: str = Depends(oauth2_scheme), db: Session = Depends(get_db)) -> GetAsset:
-    user = authservice.validate_token(token)
+    user: User = authservice.validate_token(token)
     if user:
         asset_obj = assetservice.get_asset(asset_id, db)
 
@@ -38,10 +39,9 @@ def get_asset(asset_id: int, token: str = Depends(oauth2_scheme), db: Session = 
         )
 @router.post("/assets")
 def create_asset(token: str = Depends(oauth2_scheme), data: CreateAsset = Form(...), img: str = Depends(save_img), db: Session = Depends(get_db)):
-    user = authservice.validate_token(token)
+    user: User = authservice.validate_token(token)
     if user:
-        #TODO:
-        asset_obj = assetservice.create_asset()
+        asset_obj = assetservice.create_asset(user.id, data.name, data.category_id, data.location_id, data.status, data.serial_number, data.purchase_date, data.img_url, db)
 
 @router.put("/asset/{asset_id}")
 def update_asset(asset_id: int, db: Session = Depends(get_db)):
