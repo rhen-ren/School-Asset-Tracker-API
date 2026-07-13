@@ -16,7 +16,6 @@ class CreateAsset(BaseModel):
     status: str
     serial_number: str
     purchase_date: datetime
-    img_url: str
     created_at: datetime
     updated_at: datetime
     category_id: int
